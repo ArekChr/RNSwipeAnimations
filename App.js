@@ -10,6 +10,8 @@ import {
   StatusBar,
   Text,
   PanResponder,
+  Modal,
+  View,
 } from 'react-native';
 import Ball from './src/Ball';
 import Deck from './src/Deck';
@@ -58,20 +60,24 @@ const DATA = [
 ];
 
 class App extends React.Component {
-  renderCard(item) {
+  state = {
+    modalVisible: false,
+  };
+  renderCard = item => {
     return (
       <Card key={item.id} title={item.text} image={{ uri: item.uri }}>
         <Text style={{ marginBottom: 10 }}>
           I can customize the Card further.
         </Text>
         <Button
+          onPress={() => this.setState({ modalVisible: true })}
           icon={{ name: 'code' }}
           buttonStyle={{ backgroundColor: '#03A9F4' }}
           title="View Now"
         />
       </Card>
     );
-  }
+  };
 
   renderNoMoreCards() {
     return (
@@ -92,6 +98,19 @@ class App extends React.Component {
             renderCard={this.renderCard}
             renderNoMoreCards={this.renderNoMoreCards}
           />
+          <Modal
+            animated
+            animationType="slide"
+            presentationStyle="formSheet"
+            visible={this.state.modalVisible}>
+            <View
+              style={[StyleSheet.absoluteFill, { justifyContent: 'center' }]}>
+              <Button
+                title="close"
+                onPress={() => this.setState({ modalVisible: false })}
+              />
+            </View>
+          </Modal>
         </SafeAreaView>
       </>
     );
